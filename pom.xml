@@ -55,6 +55,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<finalName>sprinboot-image-bank</finalName>
 	</build>
 
 </project>
