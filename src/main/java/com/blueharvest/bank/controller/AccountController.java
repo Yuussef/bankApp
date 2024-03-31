@@ -1,10 +1,13 @@
 package com.blueharvest.bank.controller;
 
 import com.blueharvest.bank.dto.AccountDTO;
+import com.blueharvest.bank.dto.AccountRequestDTO;
 import com.blueharvest.bank.model.Account;
 import com.blueharvest.bank.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/account")
@@ -12,13 +15,17 @@ import org.springframework.web.bind.annotation.*;
 public class AccountController {
     private final AccountService accountService;
 
-    @PostMapping("/open")
-    public AccountDTO  openAccount(@RequestParam String customerId, @RequestParam double initialCredit) {
-        return accountService.openAccount(customerId, initialCredit);
+    @PostMapping("")
+    public AccountDTO  openAccount(@RequestBody AccountRequestDTO accountRequestDTO) {
+        return accountService.openAccount(accountRequestDTO);
     }
 
     @GetMapping("/{customerId}")
     public AccountDTO getAccount(@PathVariable String customerId) {
         return accountService.getAccountByCustomerId(customerId);
+    }
+    @GetMapping("")
+    public List<AccountDTO> getAllAccount() {
+        return accountService.getAccountAllByCustomerId();
     }
 }

@@ -1,49 +1,51 @@
 package com.blueharvest.bank.service.impl;
 
 import com.blueharvest.bank.dto.AccountDTO;
+import com.blueharvest.bank.dto.AccountRequestDTO;
 import com.blueharvest.bank.model.Account;
 import com.blueharvest.bank.service.AccountService;
 import com.blueharvest.bank.service.TransactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+
+import static com.blueharvest.bank.dto.AccountDTO.fromAccountDTO;
+import static com.blueharvest.bank.dto.AccountDTO.fromAccountDTOList;
 
 @Service
 @RequiredArgsConstructor
 public class AccountServiceImpl implements AccountService {
-    private final Map<String, Account> accounts = new HashMap<>();
+    private final List<Account> accounts = new ArrayList<>();
     private final TransactionService transactionService;
 
     @Override
-    public AccountDTO  openAccount(String customerId, double initialCredit) {
+    public AccountDTO openAccount(AccountRequestDTO accountRequestDTO) {
         Account account = new Account();
         account.setAccountId(UUID.randomUUID().toString());
-        account.setCustomerId(customerId);
-        account.setBalance(initialCredit);
-        accounts.put(account.getAccountId(), account);
-        if (initialCredit != 0) {
-            transactionService.makeTransaction(account.getAccountId(), initialCredit);
+        account.setCustomerId(accountRequestDTO.getCustomerId());
+        account.setBalance(accountRequestDTO.getInitialCredit());
+        account.setAccountType(accountRequestDTO.getAccountType());
+        accounts.add(account); // Add the account to the list
+        if (accountRequestDTO.getInitialCredit() != 0) {
+            transactionService.makeTransaction(account.getAccountId(), accountRequestDTO.getInitialCredit());
         }
-        return AccountDTO.builder().accountId(account.getAccountId())
-                .customerId(account.getCustomerId()).balance(account.getBalance())
-                .build();
-        /*s*/
+        return fromAccountDTO(account);
     }
 
     @Override
     public AccountDTO  getAccountByCustomerId(String customerId) {
-        for (Account account : accounts.values()) {
-            if (account.getCustomerId().equals(customerId)) {
-                return AccountDTO.builder().accountId(account.getAccountId())
-                        .customerId(account.getCustomerId()).balance(account.getBalance())
-                        .build();
-            }
-        }
+        Optional<Account> optionalAccount = accounts.stream()
+                .filter(account -> account.getCustomerId().equals(customerId))
+                .findFirst();
 
-        return null;
+        return optionalAccount.map(AccountDTO::fromAccountDTO
+        ).orElse(null);
+    }
+
+    @Override
+    public List<AccountDTO> getAccountAllByCustomerId() {
+        return fromAccountDTOList(accounts);
     }
 
 
