@@ -17,6 +17,9 @@ Clone the repository:
 
 git clone <repository_url>
 
+**IMPORTANT : CUSTOMERS ID :
+123456 - 789012 -345678**
+
 **API Endpoints**
 
 Create Account
@@ -38,10 +41,8 @@ Request Body:
 URL: /api/account/{customerId}
 Method: GET
 Description: Retrieves user information including Name, Surname, balance, and transactions of the accounts associated with the specified customer ID.
+
 Example :/api/account/123456
-customers.add(new Customer("123456", "Youssef", "surname1"));
-customers.add(new Customer("789012", "Jane", "surname2"));
-customers.add(new Customer("345678", "Alice", "surname3"));
 
 **Example response :**
 `{
