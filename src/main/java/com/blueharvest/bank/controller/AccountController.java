@@ -2,6 +2,7 @@ package com.blueharvest.bank.controller;
 
 import com.blueharvest.bank.dto.AccountDTO;
 import com.blueharvest.bank.dto.AccountRequestDTO;
+import com.blueharvest.bank.dto.UserInformationResponse;
 import com.blueharvest.bank.model.Account;
 import com.blueharvest.bank.service.AccountService;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ public class AccountController {
     }
 
     @GetMapping("/{customerId}")
-    public AccountDTO getAccount(@PathVariable String customerId) {
+    public UserInformationResponse getAccount(@PathVariable String customerId) {
         return accountService.getAccountByCustomerId(customerId);
     }
     @GetMapping("")

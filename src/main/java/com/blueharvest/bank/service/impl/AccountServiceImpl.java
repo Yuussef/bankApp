@@ -2,15 +2,19 @@ package com.blueharvest.bank.service.impl;
 
 import com.blueharvest.bank.dto.AccountDTO;
 import com.blueharvest.bank.dto.AccountRequestDTO;
+import com.blueharvest.bank.dto.UserInformationResponse;
 import com.blueharvest.bank.model.Account;
+import com.blueharvest.bank.model.Customer;
 import com.blueharvest.bank.model.Transaction;
 import com.blueharvest.bank.service.AccountService;
+import com.blueharvest.bank.service.CustomerService;
 import com.blueharvest.bank.service.TransactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.blueharvest.bank.dto.AccountDTO.fromAccountDTO;
 import static com.blueharvest.bank.dto.AccountDTO.fromAccountDTOList;
@@ -20,6 +24,7 @@ import static com.blueharvest.bank.dto.AccountDTO.fromAccountDTOList;
 public class AccountServiceImpl implements AccountService {
     private final List<Account> accounts = new ArrayList<>();
     private final TransactionService transactionService;
+    private final CustomerService customerService;
 
     @Override
     public AccountDTO openAccount(AccountRequestDTO accountRequestDTO) {
@@ -28,7 +33,7 @@ public class AccountServiceImpl implements AccountService {
         account.setCustomerId(accountRequestDTO.getCustomerId());
         account.setBalance(accountRequestDTO.getInitialCredit());
         account.setAccountType(accountRequestDTO.getAccountType());
-        accounts.add(account); // Add the account to the list
+        accounts.add(account);
         if (accountRequestDTO.getInitialCredit().compareTo(BigDecimal.ZERO) != 0) {
             List<Transaction> transactions=new ArrayList<>();
             transactions.add(transactionService.addTransaction(account.getAccountId(), accountRequestDTO.getInitialCredit()));
@@ -38,13 +43,15 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public AccountDTO  getAccountByCustomerId(String customerId) {
-        Optional<Account> optionalAccount = accounts.stream()
+    public UserInformationResponse getAccountByCustomerId(String customerId) {
+        Optional<Customer> filteredCustomer = customerService.getCustomers().stream()
+                .filter(customer -> customer.getCustomerId().equals(customerId)).findFirst();
+        List<Account> filteredAccounts = accounts.stream()
                 .filter(account -> account.getCustomerId().equals(customerId))
-                .findFirst();
+                .collect(Collectors.toList());
 
-        return optionalAccount.map(AccountDTO::fromAccountDTO
-        ).orElse(null);
+        return UserInformationResponse.builder().name(filteredCustomer.get().getName()).surname(filteredCustomer.get().getSurname())
+                .accountDTOS(fromAccountDTOList(filteredAccounts)).build();
     }
 
     @Override

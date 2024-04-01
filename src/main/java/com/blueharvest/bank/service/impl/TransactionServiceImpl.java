@@ -14,7 +14,6 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class TransactionServiceImpl implements TransactionService {
-    private final Map<String, Transaction> transactions = new HashMap<>();
 
     @Override
     public Transaction addTransaction(String accountId, BigDecimal amount) {

@@ -2,6 +2,8 @@ package com.blueharvest.bank.service;
 
 import com.blueharvest.bank.model.Customer;
 
+import java.util.List;
+
 public interface CustomerService {
-    Customer getCustomerById(String customerId);
+    public List<Customer> getCustomers();
 }
