@@ -23,7 +23,8 @@ public class AccountDTO {
 
     public static AccountDTO fromAccountDTO(Account account) {
         return AccountDTO.builder().accountId(account.getAccountId())
-                .customerId(account.getCustomerId()).balance(account.getBalance())
+                .customerId(account.getCustomerId())
+                .balance(account.getBalance())
                 .accountType(account.getAccountType())
                 .transactions(fromTransactionDTOList(account.getTransactionList()))
                 .build();

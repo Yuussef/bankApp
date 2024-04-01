@@ -1,4 +1,4 @@
-package com.blueharvest.bank.service.impl;
+package com.blueharvest.bank.service;
 
 import com.blueharvest.bank.dto.AccountDTO;
 import com.blueharvest.bank.dto.AccountRequestDTO;
@@ -6,9 +6,6 @@ import com.blueharvest.bank.dto.UserInformationResponse;
 import com.blueharvest.bank.model.Account;
 import com.blueharvest.bank.model.Customer;
 import com.blueharvest.bank.model.Transaction;
-import com.blueharvest.bank.service.AccountService;
-import com.blueharvest.bank.service.CustomerService;
-import com.blueharvest.bank.service.TransactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +22,8 @@ public class AccountServiceImpl implements AccountService {
     private final List<Account> accounts = new ArrayList<>();
     private final TransactionService transactionService;
     private final CustomerService customerService;
+
+
 
     @Override
     public AccountDTO openAccount(AccountRequestDTO accountRequestDTO) {
