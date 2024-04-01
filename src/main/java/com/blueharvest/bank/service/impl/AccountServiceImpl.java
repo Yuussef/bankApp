@@ -3,11 +3,13 @@ package com.blueharvest.bank.service.impl;
 import com.blueharvest.bank.dto.AccountDTO;
 import com.blueharvest.bank.dto.AccountRequestDTO;
 import com.blueharvest.bank.model.Account;
+import com.blueharvest.bank.model.Transaction;
 import com.blueharvest.bank.service.AccountService;
 import com.blueharvest.bank.service.TransactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 import static com.blueharvest.bank.dto.AccountDTO.fromAccountDTO;
@@ -27,8 +29,10 @@ public class AccountServiceImpl implements AccountService {
         account.setBalance(accountRequestDTO.getInitialCredit());
         account.setAccountType(accountRequestDTO.getAccountType());
         accounts.add(account); // Add the account to the list
-        if (accountRequestDTO.getInitialCredit() != 0) {
-            transactionService.makeTransaction(account.getAccountId(), accountRequestDTO.getInitialCredit());
+        if (accountRequestDTO.getInitialCredit().compareTo(BigDecimal.ZERO) != 0) {
+            List<Transaction> transactions=new ArrayList<>();
+            transactions.add(transactionService.addTransaction(account.getAccountId(), accountRequestDTO.getInitialCredit()));
+            account.setTransactionList(transactions);
         }
         return fromAccountDTO(account);
     }

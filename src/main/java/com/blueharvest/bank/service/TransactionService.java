@@ -1,5 +1,9 @@
 package com.blueharvest.bank.service;
 
+import com.blueharvest.bank.model.Transaction;
+
+import java.math.BigDecimal;
+
 public interface TransactionService {
-    void makeTransaction(String accountId, double amount);
+    Transaction addTransaction(String accountId, BigDecimal amount);
 }
