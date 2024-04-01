@@ -11,6 +11,5 @@ import java.util.List;
 public class UserInformationResponse {
     private String name;
     private String surname;
-    private BigDecimal balance;
     private List<AccountDTO> accountDTOS;
 }

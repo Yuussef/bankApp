@@ -10,4 +10,7 @@ public class Customer {
     private String name;
     private String surname;
 
+    public Customer() {
+
+    }
 }

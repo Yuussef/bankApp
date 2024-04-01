@@ -1,4 +1,4 @@
-package com.blueharvest.bank.service.impl;
+package com.blueharvest.bank.service;
 
 import com.blueharvest.bank.model.Customer;
 import com.blueharvest.bank.service.CustomerService;
